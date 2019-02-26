@@ -61,15 +61,15 @@ public class Main {
         }
 
         int[][] usersQualityPrice = Users.generateUsers(users, alpha);
-        int[] userCount = MapUsersPlans.map(usersQualityPrice, plansQualityPrice, totalPlans);
-        int[] userTelecos = new int[telecos];
+        int[] usersPerPlan = MapUsersPlans.map(usersQualityPrice, plansQualityPrice, totalPlans);
+        int[] usersPerTelcom = new int[telecos];
 
         for (int i = 0; i < telecos; i++) {
             for (int j = 0; j < plans; j++) {
-                userTelecos[i] = userTelecos[i] + userCount[i * telecos + j];
+                usersPerTelcom[i] = usersPerTelcom[i] + usersPerPlan[i * telecos + j];
             }
 
-            System.out.println("Users for telecom " + i + " are: " + userTelecos[i]);
+            System.out.println("Users for telecom " + i + " are: " + usersPerTelcom[i]);
         }
     }
 }
