@@ -2,7 +2,7 @@ package in.amtj;
 
 class MapUsersPlans {
 
-    static int[] map(int[][] usersQualityPrice, int[][] plansQualityPrice, int totalPlans) {
+    static int[] generateMap(int[][] usersQualityPrice, int[][] plansQualityPrice, int totalPlans) {
         int[] userCount = new int[totalPlans];
         int maxQualityPlan = 0;
 

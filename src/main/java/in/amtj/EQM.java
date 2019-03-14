@@ -24,4 +24,23 @@ class EQM {
 
         return output;
     }
+
+    static double[] findEQM(double alpha, double beta) {
+        double slopeDemand;
+        if (alpha >= 0.5) slopeDemand = alpha / (alpha - 1);
+        else slopeDemand = (alpha - 1) / alpha;
+
+        double slopeSupply;
+        if (beta >= 0.5) slopeSupply = beta / (1 - beta);
+        else slopeSupply = (1 - beta) / beta;
+
+        double c1 = 1 / slopeDemand; // default intercept on y-axis for demand graph is set to 1
+        double c2 = 0 / slopeSupply; // default intercept on y-axis for supply graph is set to 0
+
+        double[] output = new double[2];
+        output[0] = (c1 - c2) / ((1 / slopeDemand) - (1 / slopeSupply)); // R = P/K
+        output[1] = output[0] / slopeSupply - c2; // Q
+
+        return output;
+    }
 }
