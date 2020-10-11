@@ -1,0 +1,77 @@
+package in.amtj;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.PriorityQueue;
+
+
+
+class Result {
+
+    static class Obj implements Comparable<Obj> {
+        int start;
+        int end;
+
+        public Obj(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public int compareTo(Obj o) {
+            return this.start - o.start;
+        }
+    }
+
+    /*
+     * Complete the 'countMeetings' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY firstDay
+     *  2. INTEGER_ARRAY lastDay
+     */
+
+    public static int countMeetings(List<Integer> firstDay, List<Integer> lastDay) {
+        // Write your code here
+        int out = 0;
+        int length = firstDay.size();
+        ArrayList<Obj> objs = new ArrayList<>();
+
+        for (int i = 0; i < length; i++) {
+            objs.add(new Obj(firstDay.get(i), lastDay.get(i)));
+        }
+        Collections.sort(objs);
+        int maxDay = objs.get(length - 1).start;
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        int day = 0;
+        int ptr = 0;
+
+        while (day <= maxDay || !heap.isEmpty()) {
+            while (ptr < length && objs.get(ptr).start == day) {
+                heap.add(objs.get(ptr).end);
+                ptr++;
+            }
+
+            if (!heap.isEmpty()) {
+                int min = heap.poll();
+                if (min >= day) out++;
+            }
+
+            day++;
+        }
+
+        return out;
+    }
+
+}
+
+//public class Solution {
+//
+//    public static void main(String[] args) throws IOException {
+//        int[] a = {5,4,4,3,2,6,6,1,3};
+//        int[] b = {9,9,8,8,7,7,6,2,3};
+//        countMeetings(a, b);
+//    }
+//}

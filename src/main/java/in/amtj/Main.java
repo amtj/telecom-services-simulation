@@ -1,25 +1,63 @@
 package in.amtj;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 
 public class Main {
 
-    public static void main(String[] args){
-        scenario2();
+    public static void main(String[] args) throws IOException {
+        for (int i = 0; i < 10000; i++) scenarioInfinite();
     }
 
-    static void scenario2(){
+    static void scenarioInfinite() throws IOException {
+        int[][] usersQualityPrice = Users.generateUniformUsers();
+        int[][] plansQualityPrice1 = Plans.generatePlansWithR(3, 0.75);
+        int[][] plansQualityPrice2 = Plans.generatePlansWithR(3, 0.25);
+        int[][] plansQualityPrice  = new int[6][2];
+
+        for (int i = 0; i < 6; i++) {
+            if (i < 3) {
+                plansQualityPrice[i][0] = plansQualityPrice1[i][0];
+                plansQualityPrice[i][1] = plansQualityPrice1[i][1];
+            }
+            else {
+                plansQualityPrice[i][0] = plansQualityPrice2[i - 3][0];
+                plansQualityPrice[i][1] = plansQualityPrice2[i - 3][1];
+            }
+        }
+
+        int[] usersPerPlan = MapUsersPlans.generateMap(usersQualityPrice, plansQualityPrice, 6);
+        int[] usersPerTelcom = new int[2];
+        int[] revenuePerTelcom = new int[2];
+        int[] qualityUsedPerTelcom = new int[2];
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                usersPerTelcom[i] = usersPerTelcom[i] + usersPerPlan[i * 3 + j];
+                revenuePerTelcom[i] = revenuePerTelcom[i] + plansQualityPrice[i * 3 + j][1] * usersPerPlan[i * 3 + j];
+                qualityUsedPerTelcom[i] = qualityUsedPerTelcom[i] + plansQualityPrice[i * 3 + j][0] * usersPerPlan[i * 3 + j];
+            }
+        }
+
+        FileWriter fw = new FileWriter("0.txt", true);
+        fw.write(usersPerTelcom[0] + "\t");
+        fw.write(revenuePerTelcom[0] + "\t");
+        fw.write(qualityUsedPerTelcom[0] + "\t");
+        fw.write(usersPerTelcom[1] + "\t");
+        fw.write(revenuePerTelcom[1] + "\t");
+        fw.write(qualityUsedPerTelcom[1] + "\n");
+        fw.close();
+
+    }
+
+    static void scenario2() throws IOException {
         int users = 100000;
-        double alpha = 0.5;
-        int[][] usersQualityPrice = Users.generateUsersFromDemand(users, alpha);
-        int[][] plansQualityPrice1 = Plans.generatePlans(3, 0.5);
-        int[][] plansQualityPrice2 = Plans.generatePlans(3, 0.6);
-        int[][] plansQualityPrice3 = Plans.generatePlans(3, 0.7);
-        int[][] plansQualityPrice4 = Plans.generatePlans(3, 0.8);
+        double alpha = -5;
+        int[][] usersQualityPrice = Users.generateSkewedUsers();
+        int[][] plansQualityPrice1 = Plans.generatePlans(3, 2);
+        int[][] plansQualityPrice2 = Plans.generatePlans(3, 1);
+        int[][] plansQualityPrice3 = Plans.generatePlans(3, 0.5);
+        int[][] plansQualityPrice4 = Plans.generatePlans(3, 0.25);
         int[][] plansQualityPrice  = new int[12][2];
 
         for (int i = 0; i < 12; i++) {
@@ -52,13 +90,22 @@ public class Main {
                 revenuePerTelcom[i] = revenuePerTelcom[i] + plansQualityPrice[i * 3 + j][1] * usersPerPlan[i * 3 + j];
                 qualityUsedPerTelcom[i] = qualityUsedPerTelcom[i] + plansQualityPrice[i * 3 + j][0] * usersPerPlan[i * 3 + j];
             }
-
-            System.out.println("    Users    for telecom " + i + " are: " + usersPerTelcom[i]);
-            System.out.println("   Revenue   for telecom " + i + " are: " + revenuePerTelcom[i]);
-            System.out.println("Quality Used for telecom " + i + " are: " + qualityUsedPerTelcom[i]);
         }
 
-        System.out.print("");
+        FileWriter fw = new FileWriter("0.txt", true);
+        fw.write(usersPerTelcom[0] + "\t");
+        fw.write(revenuePerTelcom[0] + "\t");
+        fw.write(qualityUsedPerTelcom[0] + "\t");
+        fw.write(usersPerTelcom[1] + "\t");
+        fw.write(revenuePerTelcom[1] + "\t");
+        fw.write(qualityUsedPerTelcom[1] + "\t");
+        fw.write(usersPerTelcom[2] + "\t");
+        fw.write(revenuePerTelcom[2] + "\t");
+        fw.write(qualityUsedPerTelcom[2] + "\t");
+        fw.write(usersPerTelcom[3] + "\t");
+        fw.write(revenuePerTelcom[3] + "\t");
+        fw.write(qualityUsedPerTelcom[3] + "\n");
+        fw.close();
 
     }
 

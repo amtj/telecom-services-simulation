@@ -4,17 +4,11 @@ class MapUsersPlans {
 
     static int[] generateMap(int[][] usersQualityPrice, int[][] plansQualityPrice, int totalPlans) {
         int[] userCount = new int[totalPlans];
-        int maxQualityPlan = 0;
-
-        for (int foo = 0; foo < totalPlans; foo++) {
-            if (plansQualityPrice[foo][0] > plansQualityPrice[maxQualityPlan][0]) {
-                maxQualityPlan = foo;
-            }
-        }
 
         for (int i = 0; i < usersQualityPrice.length; i++) {
             int plan = -1;
 
+            // quality conscious user
             if (usersQualityPrice[i][0] > 50) {
                 for (int j = 0; j < totalPlans; j++) {
                     if (plansQualityPrice[j][0] >= usersQualityPrice[i][0]) {
@@ -27,10 +21,7 @@ class MapUsersPlans {
                     }
                 }
 
-                if (plan == -1) {
-                    userCount[maxQualityPlan]++;
-                }
-                else {
+                if (plan != -1) {
                     userCount[plan]++;
                 }
             }

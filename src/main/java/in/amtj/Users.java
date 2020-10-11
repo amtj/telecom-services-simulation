@@ -32,24 +32,68 @@ class Users {
     static int[][] generateUsersFromDemand(int users, double alpha) {
         int[][] output = new int[users][2];
         Random random = new Random();
-        int qualityUsers = (int) (alpha * users);
-        int priceUsers = users - qualityUsers;
 
         for (int i = 0; i < users; i++) {
             double randomQ = random.nextDouble();
-            double R = (alpha / (alpha - 1)) * randomQ + 1;
+            double R = alpha * randomQ + 1;
             int randomK = random.nextInt(100) + 1;
             int P = (int) (randomK * R);
 
             output[i][0] = randomK;
             output[i][1] = P;
+        }
 
-            if ((qualityUsers <= 0 && output[i][1] > 50) || (priceUsers <= 0 && output[i][1] <= 50)) {
-                i--;
+        return output;
+    }
+
+    static int[][] generateUniformUsers() {
+        int[][] output = new int[100000][2];
+
+        for (int i = 0; i < 100; i++) {
+            double R = ((double)(100 - i)) / 100;
+
+            for (int K = 1; K <= 100; K++) {
+                for (int foo = 0; foo < 10; foo++) {
+                    int bar = i * 1000 + (K - 1) * 10 + foo;
+                    output[bar][0] = K;
+                    output[bar][1] = (int) Math.ceil(R * K);
+                }
             }
-            else {
-                if (output[i][0] > 50) qualityUsers--;
-                else priceUsers--;
+        }
+
+        return output;
+    }
+
+    static int[][] generateSkewedUsers() {
+        int[][] output = new int[100000][2];
+
+        for (int i = 0; i < 50; i++) {
+
+
+            for (int K = 1; K <= 100; K++) {
+                for (int foo = 0; foo < 10; foo++) {
+                    double R = ((double)(100 - i)) / 100;
+
+                    if (foo % 2 != 0) {
+                        R = R / 4;
+                    }
+
+                    int bar = i * 1000 + (K - 1) * 10 + foo;
+                    output[bar][0] = K;
+                    output[bar][1] = (int) Math.ceil(R * K);
+                }
+            }
+        }
+
+        for (int i = 50; i < 100; i++) {
+            double R = ((double)(100 - i)) / 100;
+
+            for (int K = 1; K <= 100; K++) {
+                for (int foo = 0; foo < 10; foo++) {
+                    int bar = i * 1000 + (K - 1) * 10 + foo;
+                    output[bar][0] = K;
+                    output[bar][1] = (int) Math.ceil(R * K);
+                }
             }
         }
 
